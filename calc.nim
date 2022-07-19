@@ -1,4 +1,5 @@
 import std/parseutils
+import std/strformat
 
 proc parse(ex : string, op : char) : (string, string)=
 
@@ -23,12 +24,38 @@ proc c(a : float, b : float, op : char) : float =
   else:
     return 0
 
-proc calc(ex : string) : float =
-  if '(' in ex or ')' in ex:
-    for i in range(ex.length):
+proc calc(expr : string) : float =
+
+  var ex : string = expr
+
+  if '(' in ex and ')' in ex:
+    var
+      pos1 :int = ex.find('(')
+      pos2 :int = len ex
+    pos2 -= 1
+
+    while pos2 > pos1:
+      if ex[pos2] == ')':
+        break
+      pos2 -= 1
+
+    pos1 += 1
+    pos2 -= 1
+
+    var temp = ex[pos1..pos2]
+    if ')','(' in temp:
+      var i = temp.find(')')
+
+
+    let num : float = calc(ex[pos1..pos2])
+    
+    ex = ex[0..pos1-2] &  fmt("{num}") & ex[pos2+2..^1]
+
+
+
+
+
       
-
-
   if not('*' in ex or '/' in ex or '+' in ex or '-' in ex):
     var res : float
     discard parsefloat(ex, res)
